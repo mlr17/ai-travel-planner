@@ -1,0 +1,30 @@
+# 构建和输出文件
+build/*
+dist/*
+node_modules/*
+
+# 测试文件
+src/test/*
+**/*.test.js
+**/*.test.ts
+**/*.test.tsx
+
+# 配置文件
+*.config.js
+config/*
+
+# 生成的类型定义
+src/types.d.ts
+src/**/*.d.ts
+
+# 特定要忽略的文件
+src/utils/mcpClient.ts
+src/utils/api.ts
+src/utils/tripService.ts
+start-dev.js
+
+# 其他
+*.min.js
+coverage/*
+*.md
+*.json 

@@ -1,0 +1,75 @@
+@import './variables.scss';
+
+.app-navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  z-index: 100;
+  
+  ul {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    li {
+      flex: 1;
+      
+      a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: var(--spacing-sm) 0;
+        color: var(--text-secondary);
+        font-size: var(--font-size-xs);
+        transition: color 0.3s ease;
+        
+        svg {
+          font-size: var(--font-size-lg);
+          margin-bottom: var(--spacing-xs);
+          opacity: 0.7;
+          transition: opacity 0.3s ease;
+        }
+        
+        span {
+          font-weight: 500;
+        }
+        
+        &:hover, &.active {
+          color: var(--text-primary);
+          
+          svg {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+  
+  // 极简风格的导航样式特别定制
+  .hypersensory-minimalism & {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    border-top: none;
+    box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.02);
+    
+    ul li a {
+      font-weight: 300;
+      
+      svg {
+        opacity: 0.5;
+      }
+      
+      &:hover, &.active {
+        svg {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+} 

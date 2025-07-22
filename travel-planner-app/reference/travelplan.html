@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云南五日旅行 | 昆明-大理-丽江-香格里拉</title>
+    <link rel="stylesheet" href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-100-M/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
+    <link rel="stylesheet" href="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/mapbox-gl/2.6.1/mapbox-gl.min.css">
+    <script type="text/javascript">
+        window._AMapSecurityConfig = {
+            securityJsCode:'e6d0a1a9a9a6bdf8e45dc40c41d36d16',
+        }
+    </script>
+    <script src="https://webapi.amap.com/maps?v=2.0&key=99d2c85b99831da3254233f32b1e2a68"></script>
+    <style>
+        :root {
+            --primary-color: rgba(240, 240, 240, 0.95);
+            --accent-color: rgba(220, 220, 220, 0.95);
+            --text-color: rgba(60, 60, 60, 0.95);
+            --light-text: rgba(120, 120, 120, 0.95);
+            --ultra-light: rgba(200, 200, 200, 0.95);
+            --spacing-unit: 0.75rem;
+            --transition-time: 0.5s;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        html, body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 var(--spacing-unit);
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 500;
+            letter-spacing: -0.025em;
+        }
+        
+        .ultra-thin {
+            font-weight: 300;
+        }
+        
+        .section {
+            padding: calc(var(--spacing-unit) * 4) 0;
+            position: relative;
+        }
+        
+        .subtle-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(to right, var(--ultra-light) 1px, transparent 1px),
+                              linear-gradient(to bottom, var(--ultra-light) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .title-box {
+            margin-bottom: calc(var(--spacing-unit) * 6);
+        }
+        
+        .card {
+            background-color: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(240, 240, 240, 0.8);
+            border-radius: 2px;
+            padding: calc(var(--spacing-unit) * 3);
+            margin-bottom: calc(var(--spacing-unit) * 3);
+            transition: all var(--transition-time) ease;
+            backdrop-filter: blur(2px);
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.02);
+        }
+        
+        .day-marker {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--light-text);
+            margin-bottom: var(--spacing-unit);
+        }
+        
+        .time-item {
+            display: flex;
+            margin-bottom: calc(var(--spacing-unit) * 2);
+            position: relative;
+        }
+        
+        .time-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .time-item:before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 42px;
+            width: 1px;
+            height: calc(100% - 10px);
+            background-color: var(--ultra-light);
+            z-index: 0;
+        }
+        
+        .time-item:last-child:before {
+            display: none;
+        }
+        
+        .time {
+            min-width: 85px;
+            padding-right: var(--spacing-unit);
+            font-size: 0.825rem;
+            color: var(--light-text);
+            text-align: right;
+            padding-top: 5px;
+        }
+        
+        .activity {
+            flex: 1;
+            position: relative;
+            padding-left: calc(var(--spacing-unit) * 3);
+        }
+        
+        .activity:before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 0;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--ultra-light);
+            z-index: 1;
+        }
+        
+        .activity-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .activity-desc {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+        
+        .notes {
+            background-color: rgba(250, 250, 250, 0.5);
+            border-left: 2px solid var(--accent-color);
+            padding: var(--spacing-unit);
+            margin-top: calc(var(--spacing-unit) * 2);
+            font-size: 0.85rem;
+        }
+        
+        .tips-section {
+            padding: calc(var(--spacing-unit) * 3);
+            background-color: rgba(255, 255, 255, 0.3);
+            margin-bottom: calc(var(--spacing-unit) * 3);
+        }
+        
+        .tip-item {
+            margin-bottom: calc(var(--spacing-unit) * 1.5);
+            font-size: 0.9rem;
+        }
+        
+        .tip-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .tip-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .info-box {
+            display: flex;
+            margin-bottom: calc(var(--spacing-unit) * 2);
+        }
+        
+        .info-icon {
+            min-width: 30px;
+            color: var(--light-text);
+        }
+        
+        .info-content {
+            flex: 1;
+        }
+        
+        .weather-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-unit);
+            margin-top: var(--spacing-unit);
+        }
+        
+        .weather-item {
+            padding: calc(var(--spacing-unit) * 0.75);
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 2px;
+            text-align: center;
+            min-width: 70px;
+        }
+        
+        .weather-date {
+            font-size: 0.7rem;
+            color: var(--light-text);
+            margin-bottom: 0.25rem;
+        }
+        
+        .weather-temp {
+            font-size: 0.9rem;
+        }
+        
+        /* 地图样式 */
+        .map-container {
+            width: 100%;
+            height: 400px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(240, 240, 240, 0.8);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: calc(var(--spacing-unit) * 3);
+            transition: all var(--transition-time) ease;
+            position: relative;
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* 地图加载中提示 */
+        .map-loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        
+        .map-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.02);
+        }
+        
+        .amap-info-content {
+            font-family: 'Noto Sans SC', sans-serif;
+            padding: 10px;
+            max-width: 200px;
+        }
+        
+        .info-title {
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+        
+        .info-body {
+            font-size: 12px;
+            color: var(--light-text);
+        }
+        
+        @media (max-width: 640px) {
+            .time {
+                min-width: 60px;
+                font-size: 0.75rem;
+            }
+            
+            .activity {
+                padding-left: calc(var(--spacing-unit) * 2);
+            }
+        }
+        
+        /* 动态效果 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.8s ease;
+        }
+        
+        .visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            .fade-in {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+        }
+        
+        /* 地图标签样式 */
+        .map-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-bottom: 1px solid rgba(220, 220, 220, 0.8);
+            padding: 0 10px;
+        }
+        
+        .map-tab {
+            padding: 8px 12px;
+            margin-right: 2px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-size: 13px;
+            font-family: 'Noto Sans SC', sans-serif;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .map-tab:hover {
+            background-color: rgba(240, 240, 240, 0.5);
+        }
+        
+        .map-tab.active {
+            border-bottom: 2px solid #888;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 640px) {
+            .map-tab {
+                padding: 6px 8px;
+                font-size: 12px;
+            }
+        }
+        
+        /* 标注点标签样式 */
+        .custom-marker-label {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 4px;
+            padding: 3px 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 2;
+            box-shadow: 0 0 3px rgba(0,0,0,0.2);
+            transform: translateY(-130%);
+            pointer-events: none;
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto px-4 py-12">
+        <header class="title-box text-center">
+            <h1 class="text-4xl md:text-5xl mb-3">云南五日行程</h1>
+            <p class="ultra-thin text-lg text-gray-500">昆明 · 大理 · 丽江 · 香格里拉</p>
+            <p class="text-sm text-gray-400 mt-3">2025年5月1日 - 5月5日</p>
+        </header>
+
+        <!-- 行程地图 -->
+        <div class="map-container fade-in">
+            <h3 class="text-xl p-4 bg-white bg-opacity-70">行程路线图</h3>
+            
+            <!-- 添加日期切换标签 -->
+            <div class="map-tabs">
+                <button class="map-tab active" data-day="1">第一天</button>
+                <button class="map-tab" data-day="2">第二天</button>
+                <button class="map-tab" data-day="3">第三天</button>
+                <button class="map-tab" data-day="4">第四天</button>
+                <button class="map-tab" data-day="5">第五天</button>
+            </div>
+            
+            <div id="map"></div>
+            <div class="map-loading" id="mapLoading">
+                <p>地图加载中...</p>
+            </div>
+            <!-- 静态地图备用 -->
+            <div id="staticMap" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding-top: 50px; text-align: center;">
+                <p class="text-gray-600 text-sm mb-2">地图加载失败，显示静态路线图</p>
+                <div class="overflow-auto p-4" style="height: calc(100% - 30px);">
+                    <div class="bg-white bg-opacity-90 p-4 rounded">
+                        <h4 class="text-lg mb-3">云南五日游行程路线</h4>
+                        <ul class="text-left">
+                            <li class="flex items-center mb-4">
+                                <span class="inline-block w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center mr-2">1</span>
+                                <div>
+                                    <strong>第一天：昆明</strong>
+                                    <p class="text-sm text-gray-600">翠湖公园、金马碧鸡坊</p>
+                                </div>
+                            </li>
+                            <li class="flex items-center mb-4">
+                                <span class="inline-block w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center mr-2">2</span>
+                                <div>
+                                    <strong>第二天：石林 → 大理</strong>
+                                    <p class="text-sm text-gray-600">石林风景区、大理古城</p>
+                                </div>
+                            </li>
+                            <li class="flex items-center mb-4">
+                                <span class="inline-block w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center mr-2">3</span>
+                                <div>
+                                    <strong>第三天：大理周边</strong>
+                                    <p class="text-sm text-gray-600">洱海、崇圣寺三塔、喜洲古镇</p>
+                                </div>
+                            </li>
+                            <li class="flex items-center mb-4">
+                                <span class="inline-block w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center mr-2">4</span>
+                                <div>
+                                    <strong>第四天：大理 → 丽江</strong>
+                                    <p class="text-sm text-gray-600">丽江古城、玉龙雪山</p>
+                                </div>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="inline-block w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center mr-2">5</span>
+                                <div>
+                                    <strong>第五天：丽江 → 虎跳峡 → 香格里拉</strong>
+                                    <p class="text-sm text-gray-600">虎跳峡、松赞林寺</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="section">
+            <div class="subtle-pattern"></div>
+            
+            <!-- 第一天 -->
+            <div class="card fade-in">
+                <div class="day-marker">第一天 | 5月1日 (星期四)</div>
+                <h3 class="text-xl mb-4">昆明初体验</h3>
+                
+                <div class="time-item">
+                    <div class="time">上午</div>
+                    <div class="activity">
+                        <div class="activity-title">抵达昆明长水国际机场</div>
+                        <div class="activity-desc">抵达后入住酒店，稍作休息</div>
+                    </div>
+                </div>
+                
+                <div class="time-item">
+                    <div class="time">12:30-14:00</div>
+                    <div class="activity">
+                        <div class="activity-title">品尝云南特色美食</div>
+                        <div class="activity-desc">推荐：过桥米线、汽锅鸡、烤豆腐</div>
+                    </div>
+                </div>
+                
+                <div class="time-item">
+                    <div class="time">14:30-17:00</div>
+                    <div class="activity">
+                        <div class="activity-title">游览翠湖公园</div>
+                        <div class="activity-desc">感受昆明"春城"的悠闲氛围，欣赏湖光山色</div>
+                    </div>
+                </div>
+                
+                <div class="time-item">
+                    <div class="time">晚上</div>
+                    <div class="activity">
+                        <div class="activity-title">昆明夜生活</div>
+                        <div class="activity-desc">逛金马碧鸡坊，品尝小吃，体验昆明夜生活</div>
+                    </div>
+                </div>
+                
+                <div class="notes">
+                    <i class="fas fa-comment-dots mr-2 text-gray-400"></i>
+                    <span>昆明海拔1900米左右，气候宜人，但早晚温差较大，建议携带薄外套。</span>
+                </div>
+            </div>
+            
+            <!-- 第二天 -->
+            <div class="card fade-in">
+                <div class="day-marker">第二天 | 5月2日 (星期五)</div>
+                <h3 class="text-xl mb-4">石林奇观 - 前往大理</h3>
+                
+                <div class="time-item">
+                    <div class="time">08:00-11:30</div>
+                    <div class="activity">
+                        <div class="activity-title">游览石林风景区</div>
+                        <div class="activity-desc">探索世界自然遗产石林景区，欣赏喀斯特地貌奇观</div>
+                        <div class="notes">
+                            <i class="fas fa-info-circle mr-2 text-gray-400"></i>
+                            <span>门票：40元/人，建议提前2小时游览完毕</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="time-item">
+                    <div class="time">12:00-13:00</div>
+                    <div class="activity">
+                        <div class="activity-title">午餐</div>
+                        <div class="activity-desc">享用当地特色美食</div>
+                    </div>
+                </div>
+                
+                <div class="time-item">
+                    <div class="time">13:30-17:30</div>
+                    <div class="activity">
+                        <div class="activity-title">乘车前往大理</div>
+                        <div class="activity-desc">乘坐高铁或大巴前往大理古城（约4小时）</div>
+                        <div class="notes">
+                            <i class="fas fa-info-circle mr-2 text-gray-400"></i>
+                            <span>高铁票：约120元/人，大巴票：约90元/人</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="time-item">
+                    <div class="time">18:00-21:00</div>
+                    <div class="activity">
+                        <div class="activity-title">大理古城夜游</div>
+                        <div class="activity-desc">漫步古城，品尝白族特色小吃，体验夜市文化</div>
+                    </div>
+                </div>
+                
+                <div class="notes">
+                    <i class="fas fa-comment-dots mr-2 text-gray-400"></i>
+                    <span>石林景区较大，请穿舒适的鞋子。大理海拔2090米，可能会有轻微高原反应。</span>
+                </div>
+            </div>
+            
+            <!-- 第三天 -->
+            <div class="card fade-in">
+                <div class="day-marker">第三天 | 5月3日 (星期六)</div>
+                <h3 class="text-xl mb-4">洱海风光 - 崇圣寺三塔</h3>
+                
+                <div class="time-item">
+                    <div class="time">07:30-09:00</div>
+                    <div class="activity">
+                        <div class="activity-title">洱海日出</div>
+                        <div class="activity-desc">欣赏洱海晨曦美景，拍摄绝美日出</div>
+                    </div>
+                </div>
+                
+                <div class="time-item">
+                    <div class="time">09:30-12:00</div>
+                    <div class="activity">
+                        <div class="activity-title">环洱海游览</div>
+                        <div class="activity-desc">骑行或乘船游览洱海，欣赏苍山洱海美景</div>
+                        <div class="notes">
+                            <i class="fas fa-info-circle mr-2 text-gray-400"></i>
+                            <span>电瓶车+游船套票：单程30元，往返50元</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="time-item">
+                    <div class="time">13:00-15:00</div>
+                    <div class="activity">
+                        <div class="activity-title">崇圣寺三塔</div>
+                        <div class="activity-desc">参观大理标志性古迹，了解佛教文化</div>
+                        <div class="notes">
+                            <i class="fas fa-info-circle mr-2 text-gray-400"></i>
+                            <span>门票：121元/人</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="time-item">
+                    <div class="time">15:30-17:00</div>
+                    <div class="activity">
+                        <div class="activity-title">喜洲古镇</div>
+                        <div class="activity-desc">参观白族民居，体验白族文化，品尝喜洲粑粑</div>
+                    </div>
+                </div>
+                
+                <div class="notes">
+                    <i class="fas fa-comment-dots mr-2 text-gray-400"></i>
+                    <span>洱海环线骑行可租赁自行车或电动车。喜洲古镇无需门票，但部分民居参观需付费。</span>
+                </div>
+            </div>
+            
+            <!-- 第四天 -->
+            <div class="card fade-in">
+                <div class="day-marker">第四天 | 5月4日 (星期日)</div>
+                <h3 class="text-xl mb-4">大理 - 丽江古城 - 玉龙雪山</h3>
+                
+                <div class="time-item">
+                    <div class="time">08:00-11:00</div>
+                    <div class="activity">
+                        <div class="activity-title">前往丽江</div>
+                        <div class="activity-desc">乘坐大巴或高铁前往丽江（约3小时），沿途欣赏美景</div>
+                        <div class="notes">
+                            <i class="fas fa-info-circle mr-2 text-gray-400"></i>
+                            <span>高铁票：约80元/人，大巴票：约60元/人</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="time-item">
+                    <div class="time">12:00-13:30</div>
+                    <div class="activity">
+                        <div class="activity-title">丽江古城</div>
+                        <div class="activity-desc">午餐后游览丽江古城，感受纳西族文化</div>
+                        <div class="notes">
+                            <i class="fas fa-info-circle mr-2 text-gray-400"></i>
+                            <span>古城维护费：80元/人</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="time-item">
+                    <div class="time">14:00-17:30</div>
+                    <div class="activity">
+                        <div class="activity-title">玉龙雪山</div>
+                        <div class="activity-desc">乘坐大索道欣赏雪山景观，游览蓝月谷</div>
+                        <div class="notes">
+                            <i class="fas fa-info-circle mr-2 text-gray-400"></i>
+                            <span>门票（含观光车）：150元/人，大索道：120元/人，蓝月谷需另购门票</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="time-item">
+                    <div class="time">晚上</div>
+                    <div class="activity">
+                        <div class="activity-title">丽江古城夜游</div>
+                        <div class="activity-desc">在四方街体验纳西族传统文化，欣赏古乐表演</div>
+                    </div>
+                </div>
+                
+                <div class="notes">
+                    <i class="fas fa-comment-dots mr-2 text-gray-400"></i>
+                    <span>玉龙雪山海拔较高，注意防寒和防高原反应。建议提前一天预订大索道票。</span>
+                </div>
+            </div>
+            
+            <!-- 第五天 -->
+            <div class="card fade-in">
+                <div class="day-marker">第五天 | 5月5日 (星期一)</div>
+                <h3 class="text-xl mb-4">虎跳峡 - 香格里拉</h3>
+                
+                <div class="time-item">
+                    <div class="time">07:30-09:30</div>
+                    <div class="activity">
+                        <div class="activity-title">前往虎跳峡</div>
+                        <div class="activity-desc">乘车前往虎跳峡景区（约2小时）</div>
+                    </div>
+                </div>
+                
+                <div class="time-item">
+                    <div class="time">09:30-11:30</div>
+                    <div class="activity">
+                        <div class="activity-title">游览虎跳峡</div>
+                        <div class="activity-desc">观赏世界上最深的峡谷之一，感受金沙江的磅礴气势</div>
+                        <div class="notes">
+                            <i class="fas fa-info-circle mr-2 text-gray-400"></i>
+                            <span>门票：45元/人</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="time-item">
+                    <div class="time">12:00-14:30</div>
+                    <div class="activity">
+                        <div class="activity-title">前往香格里拉</div>
+                        <div class="activity-desc">午餐后乘车前往香格里拉（约2.5小时）</div>
+                    </div>
+                </div>
+                
+                <div class="time-item">
+                    <div class="time">15:00-17:30</div>
+                    <div class="activity">
+                        <div class="activity-title">松赞林寺</div>
+                        <div class="activity-desc">参观被誉为"小布达拉宫"的藏传佛教寺院</div>
+                        <div class="notes">
+                            <i class="fas fa-info-circle mr-2 text-gray-400"></i>
+                            <span>门票：115元/人</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="notes">
+                    <i class="fas fa-comment-dots mr-2 text-gray-400"></i>
+                    <span>香格里拉海拔约3400米，注意防范高原反应，建议准备红景天等预防药物。</span>
+                </div>
+            </div>
+            
+            <!-- 旅行贴士 -->
+            <div class="card fade-in">
+                <h3 class="text-xl mb-4">旅行贴士</h3>
+                
+                <div class="tips-section">
+                    <div class="tip-item">
+                        <div class="tip-title"><i class="fas fa-suitcase mr-2"></i>行李打包</div>
+                        <div>轻便衣物、舒适鞋子、防晒霜（SPF50+）、帽子、墨镜、保温水杯、雨伞、常用药品</div>
+                    </div>
+                    
+                    <div class="tip-item">
+                        <div class="tip-title"><i class="fas fa-cloud-sun mr-2"></i>气候提醒</div>
+                        <div>云南5月气候宜人，昆明和大理昼夜温差较大，丽江和香格里拉早晚凉爽，请适当携带保暖衣物</div>
+                    </div>
+                    
+                    <div class="tip-item">
+                        <div class="tip-title"><i class="fas fa-bed mr-2"></i>住宿建议</div>
+                        <div>昆明靠近火车站或翠湖附近，大理推荐古城内客栈，丽江建议入住四方街附近，香格里拉可选古城内藏式客栈</div>
+                    </div>
+                    
+                    <div class="tip-item">
+                        <div class="tip-title"><i class="fas fa-utensils mr-2"></i>美食推荐</div>
+                        <div>昆明：过桥米线、汽锅鸡、烤豆腐；大理：乳扇、饵丝、大理砂锅鱼；丽江：丽江粑粑、鸡豆凉粉、土鸡火锅</div>
+                    </div>
+                    
+                    <div class="tip-item">
+                        <div class="tip-title"><i class="fas fa-camera mr-2"></i>摄影建议</div>
+                        <div>洱海日出、丽江古城夜景、玉龙雪山日出日落、虎跳峡大景区是不可错过的摄影点</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 目的地天气 -->
+            <div class="card fade-in">
+                <h3 class="text-xl mb-4">目的地天气</h3>
+                
+                <div class="info-box">
+                    <div class="info-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <div class="info-content">
+                        <h4 class="text-lg mb-1">昆明</h4>
+                        <p class="text-sm text-gray-500">被誉为"春城"的花园城市</p>
+                        <div class="weather-box">
+                            <div class="weather-item">
+                                <div class="weather-date">5月1日</div>
+                                <div class="weather-temp">24°C/13°C</div>
+                                <div class="text-xs">晴</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <div class="info-icon">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <div class="info-content">
+                        <h4 class="text-lg mb-1">大理</h4>
+                        <p class="text-sm text-gray-500">风花雪月的"洱海之滨"</p>
+                        <div class="weather-box">
+                            <div class="weather-item">
+                                <div class="weather-date">5月2日</div>
+                                <div class="weather-temp">27°C/9°C</div>
+                                <div class="text-xs">多云</div>
+                            </div>
+                            <div class="weather-item">
+                                <div class="weather-date">5月3日</div>
+                                <div class="weather-temp">27°C/11°C</div>
+                                <div class="text-xs">多云</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <div class="info-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <div class="info-content">
+                        <h4 class="text-lg mb-1">丽江</h4>
+                        <p class="text-sm text-gray-500">古城雪山的"艳遇之都"</p>
+                        <div class="weather-box">
+                            <div class="weather-item">
+                                <div class="weather-date">5月4日</div>
+                                <div class="weather-temp">23°C/10°C</div>
+                                <div class="text-xs">晴</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <div class="info-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <div class="info-content">
+                        <h4 class="text-lg mb-1">香格里拉</h4>
+                        <p class="text-sm text-gray-500">高原藏区的"失落的地平线"</p>
+                        <div class="weather-box">
+                            <div class="weather-item">
+                                <div class="weather-date">5月5日</div>
+                                <div class="weather-temp">14°C/2°C</div>
+                                <div class="text-xs">多云</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 重要信息 -->
+            <div class="card fade-in">
+                <h3 class="text-xl mb-4">重要信息</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="text-base mb-2">紧急联系电话</h4>
+                        <ul class="list-disc pl-5 text-sm">
+                            <li>旅游咨询: 0871-12301</li>
+                            <li>紧急救援: 120</li>
+                            <li>报警电话: 110</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-base mb-2">交通信息</h4>
+                        <ul class="list-disc pl-5 text-sm">
+                            <li>昆明长水国际机场</li>
+                            <li>大理火车站</li>
+                            <li>丽江三义机场</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // 全局变量用于检查地图加载状态
+        let mapLoaded = false;
+        let mapInitialized = false;
+        let map = null;
+
+        // 动态加载高德地图API
+        function loadAMapScript() {
+            return new Promise((resolve, reject) => {
+                if (typeof AMap !== 'undefined') {
+                    resolve();
+                    return;
+                }
+                
+                // 设置10秒超时
+                const timeout = setTimeout(() => {
+                    reject(new Error('地图加载超时'));
+                }, 10000);
+                
+                const script = document.createElement('script');
+                script.src = 'https://webapi.amap.com/maps?v=2.0&key=99d2c85b99831da3254233f32b1e2a68&callback=initAMap';
+                script.onerror = () => {
+                    clearTimeout(timeout);
+                    reject(new Error('地图加载失败'));
+                };
+                document.head.appendChild(script);
+                
+                window.initAMap = function() {
+                    clearTimeout(timeout);
+                    mapLoaded = true;
+                    resolve();
+                };
+            });
+        }
+
+        // 显示静态地图
+        function showStaticMap() {
+            document.getElementById('mapLoading').style.display = 'none';
+            document.getElementById('staticMap').style.display = 'block';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            fadeElements.forEach(element => {
+                observer.observe(element);
+            });
+            
+            // 加载高德地图API并显示第一天数据
+            loadAMapScript()
+                .then(() => {
+                    // 初始化地图
+                    initMap();
+                    
+                    // 在地图初始化完成后，触发第一天标签的点击事件
+                    setTimeout(() => {
+                        const firstDayTab = document.querySelector('.map-tab[data-day="1"]');
+                        if (firstDayTab) {
+                            firstDayTab.click();
+                        }
+                    }, 500);
+                })
+                .catch(error => {
+                    console.error('高德地图API加载失败:', error);
+                    showStaticMap();
+                });
+        });
+        
+        function initMap() {
+            if (mapInitialized) return; // 避免重复初始化
+            
+            try {
+                console.log('正在初始化地图...');
+                console.log('AMap对象可用:', typeof AMap !== 'undefined');
+                
+                mapInitialized = true;
+                
+                // 创建地图实例
+                map = new AMap.Map('map', {
+                    zoom: 7,
+                    center: [100.8984, 25.6065], // 云南中心位置
+                    viewMode: '2D', // 改为2D视图更容易看见
+                    mapStyle: 'amap://styles/normal' // 确保使用明确的地图样式
+                });
+                
+                // 添加初始化完成事件
+                map.on('complete', function(){
+                    console.log('地图初始化完成');
+                    // 隐藏加载提示
+                    document.getElementById('mapLoading').style.display = 'none';
+                });
+                
+                map.on('error', function(error){
+                    console.error('地图加载错误:', error);
+                    showStaticMap();
+                });
+                
+                // 添加控件
+                map.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
+                    console.log('地图控件加载完成');
+                    map.addControl(new AMap.ToolBar());
+                    map.addControl(new AMap.Scale());
+                });
+                
+                // 定义行程坐标点，按天分组
+                const pathsByDay = {
+                    1: [
+                        {name: '昆明', position: [102.8329, 24.8801], desc: '翠湖公园、金马碧鸡坊'}
+                    ],
+                    2: [
+                        {name: '石林', position: [103.3002, 24.7712], desc: '石林风景区'},
+                        {name: '大理古城', position: [100.1671, 25.6944], desc: '古城、白族特色小吃'}
+                    ],
+                    3: [
+                        {name: '大理古城', position: [100.1671, 25.6944], desc: '古城'},
+                        {name: '洱海', position: [100.1904, 25.8416], desc: '洱海日出、环洱海游览'},
+                        {name: '崇圣寺三塔', position: [100.1468, 25.7043], desc: '大理标志性古迹'},
+                        {name: '喜洲古镇', position: [100.2329, 25.8476], desc: '白族民居、白族文化'}
+                    ],
+                    4: [
+                        {name: '大理', position: [100.1671, 25.6944], desc: '出发点'},
+                        {name: '丽江古城', position: [100.2330, 26.8721], desc: '丽江古城、纳西族文化'},
+                        {name: '玉龙雪山', position: [100.1830, 27.1000], desc: '玉龙雪山、蓝月谷'}
+                    ],
+                    5: [
+                        {name: '丽江', position: [100.2330, 26.8721], desc: '出发点'},
+                        {name: '虎跳峡', position: [100.1295, 27.1765], desc: '世界最深峡谷之一'},
+                        {name: '香格里拉', position: [99.7068, 27.8295], desc: '松赞林寺、高原藏区风光'}
+                    ]
+                };
+                
+                // 路线颜色 - 统一使用灰色
+                const routeColor = '#888888';
+                
+                // 保存所有标记点和路线
+                const allMarkers = [];
+                const markersByDay = {};
+                const polylinesByDay = {};
+                const labelsByDay = {};
+                
+                // 遍历每天的路线并创建
+                Object.keys(pathsByDay).forEach(day => {
+                    markersByDay[day] = [];
+                    labelsByDay[day] = [];
+                    const dayPoints = pathsByDay[day];
+                    const dayMarkers = markersByDay[day];
+                    
+                    // 添加每天的标记点
+                    dayPoints.forEach(point => {
+                        // 创建圆圈标记
+                        const circleContent = document.createElement('div');
+                        circleContent.className = 'custom-marker';
+                        circleContent.style.width = '12px';
+                        circleContent.style.height = '12px';
+                        circleContent.style.backgroundColor = '#888';
+                        circleContent.style.border = '2px solid white';
+                        circleContent.style.borderRadius = '50%';
+                        circleContent.style.boxShadow = '0 0 3px rgba(0,0,0,0.3)';
+                        
+                        const marker = new AMap.Marker({
+                            position: point.position,
+                            title: point.name,
+                            map: map,
+                            content: circleContent
+                        });
+                        
+                        // 创建永久标签显示信息
+                        const labelContent = document.createElement('div');
+                        labelContent.className = 'custom-marker-label';
+                        labelContent.innerHTML = `<strong>${point.name}</strong>: ${point.desc}`;
+                        
+                        const label = new AMap.Marker({
+                            position: point.position,
+                            map: map,
+                            content: labelContent,
+                            offset: new AMap.Pixel(0, -10),
+                            zIndex: 100
+                        });
+                        
+                        labelsByDay[day].push(label);
+                        dayMarkers.push(marker);
+                        allMarkers.push(marker);
+                    });
+                    
+                    // 如果当天有多个点，添加连线
+                    if (dayMarkers.length > 1) {
+                        const polyline = new AMap.Polyline({
+                            path: dayMarkers.map(marker => marker.getPosition()),
+                            isOutline: true,
+                            outlineColor: '#FFFFFF',
+                            borderWeight: 1,
+                            strokeColor: routeColor,
+                            strokeOpacity: 0.8,
+                            strokeWeight: 3,
+                            strokeStyle: 'solid',
+                            lineJoin: 'round',
+                            lineCap: 'round',
+                            zIndex: 50,
+                        });
+                        
+                        polyline.setMap(map);
+                        polylinesByDay[day] = polyline;
+                    }
+                });
+                
+                // 添加标签切换功能
+                const mapTabs = document.querySelectorAll('.map-tab');
+                mapTabs.forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        // 移除所有标签的active类
+                        mapTabs.forEach(t => t.classList.remove('active'));
+                        // 为当前标签添加active类
+                        this.classList.add('active');
+                        
+                        const day = this.getAttribute('data-day');
+                        
+                        // 隐藏所有标记点和路线
+                        Object.keys(markersByDay).forEach(d => {
+                            markersByDay[d].forEach(marker => {
+                                marker.hide();
+                            });
+                            
+                            labelsByDay[d].forEach(label => {
+                                label.hide();
+                            });
+                            
+                            if (polylinesByDay[d]) {
+                                polylinesByDay[d].hide();
+                            }
+                        });
+                        
+                        // 显示特定天
+                        markersByDay[day].forEach(marker => {
+                            marker.show();
+                        });
+                        
+                        labelsByDay[day].forEach(label => {
+                            label.show();
+                        });
+                        
+                        if (polylinesByDay[day]) {
+                            polylinesByDay[day].show();
+                        }
+                        
+                        // 调整视图以显示所有可见标记
+                        map.setFitView(markersByDay[day]);
+                    });
+                });
+                
+                // 初始化时调整视图以显示所有标记
+                map.setFitView();
+                
+                // 强制重新渲染地图
+                setTimeout(() => {
+                    map.setStatus({dragEnable: false});
+                    map.setStatus({dragEnable: true});
+                }, 500);
+                
+            } catch (error) {
+                console.error('地图初始化失败:', error);
+                showStaticMap();
+            }
+        }
+    </script>
+</body>
+</html>

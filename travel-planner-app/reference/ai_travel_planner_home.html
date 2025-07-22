@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 旅行规划</title>
+    <link rel="stylesheet" href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-100-M/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <style>
+        :root {
+            --primary-bg: #fafafa;
+            --secondary-bg: #f5f5f5;
+            --text-primary: rgba(30, 30, 30, 0.95);
+            --text-secondary: rgba(80, 80, 80, 0.85);
+            --text-tertiary: rgba(120, 120, 120, 0.75);
+            --accent-color: rgba(200, 200, 200, 0.5);
+            --border-color: rgba(220, 220, 220, 0.6);
+            --shadow-color: rgba(0, 0, 0, 0.03);
+            --highlight-color: rgba(255, 255, 255, 0.9);
+            --delete-color: rgba(239, 68, 68, 0.9);
+            --transition-time: 0.4s;
+            --spacing-unit: 0.75rem;
+            --border-radius: 3px;
+            --font-primary: 'Noto Sans SC', sans-serif;
+            --font-secondary: 'Noto Serif SC', serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html, body {
+            font-family: var(--font-primary);
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-weight: 300;
+            letter-spacing: 0.01em;
+            overflow-x: hidden;
+            height: 100%;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+            position: relative;
+        }
+
+        /* 微妙的背景纹理 */
+        .app-container::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, var(--border-color) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--border-color) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.05;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* 顶部导航栏 */
+        .app-header {
+            padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2.5);
+            background-color: var(--highlight-color);
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .app-title {
+            font-family: var(--font-secondary);
+            font-weight: 400;
+            font-size: 1.4rem;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+        }
+
+        .theme-toggle {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            transition: color var(--transition-time) ease;
+        }
+
+        .theme-toggle:hover {
+            color: var(--text-primary);
+        }
+
+        /* 主内容区 */
+        .app-main {
+            flex: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+            padding: calc(var(--spacing-unit) * 2);
+            padding-bottom: calc(var(--spacing-unit) * 10);
+            position: relative;
+        }
+
+        .section-title {
+            margin-bottom: calc(var(--spacing-unit) * 3);
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-family: var(--font-secondary);
+            font-weight: 500;
+            font-size: 1.6rem;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            margin-bottom: calc(var(--spacing-unit) * 0.5);
+        }
+
+        .micro-line {
+            width: 30px;
+            height: 1px;
+            background-color: var(--text-tertiary);
+            opacity: 0.3;
+        }
+
+        /* 行程卡片列表 */
+        .itinerary-list {
+            display: flex;
+            flex-direction: column;
+            gap: calc(var(--spacing-unit) * 2);
+        }
+
+        .itinerary-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--border-radius);
+            background-color: rgba(255, 255, 255, 0.7);
+            border: 1px solid var(--border-color);
+            transition: transform var(--transition-time) ease, box-shadow var(--transition-time) ease;
+            transform: translateX(0);
+            touch-action: pan-x;
+        }
+
+        .itinerary-card:hover {
+            box-shadow: 0 8px 20px var(--shadow-color);
+        }
+
+        .card-content {
+            display: flex;
+            padding: calc(var(--spacing-unit) * 1.5);
+            gap: calc(var(--spacing-unit) * 1.5);
+        }
+
+        .card-image {
+            width: 100px;
+            height: 100px;
+            border-radius: var(--border-radius);
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
+        }
+
+        .card-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-family: var(--font-secondary);
+            font-weight: 500;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: calc(var(--spacing-unit) * 0.5);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: calc(var(--spacing-unit) * 1);
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .meta-item i {
+            font-size: 0.8rem;
+        }
+
+        .delete-btn {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            background-color: var(--delete-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            transform: translateX(100%);
+            transition: transform var(--transition-time) ease;
+        }
+
+        .itinerary-card.swiped {
+            transform: translateX(-80px);
+        }
+
+        /* 创建行程按钮 */
+        .create-btn {
+            position: fixed;
+            bottom: calc(var(--spacing-unit) * 4);
+            right: calc(var(--spacing-unit) * 4);
+            width: 60px;
+            height: 60px;
+            background-color: var(--text-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all var(--transition-time) ease;
+            z-index: 20;
+            cursor: pointer;
+        }
+
+        .create-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .create-btn:active {
+            transform: translateY(0);
+        }
+
+        /* 空状态提示 */
+        .empty-state {
+            text-align: center;
+            padding: calc(var(--spacing-unit) * 8) calc(var(--spacing-unit) * 2);
+            color: var(--text-tertiary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: calc(var(--spacing-unit) * 2);
+            opacity: 0.6;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            margin-bottom: calc(var(--spacing-unit) * 1);
+        }
+
+        .empty-state small {
+            font-size: 0.9rem;
+        }
+
+        /* 底部导航栏 */
+        .app-footer {
+            padding: calc(var(--spacing-unit) * 2);
+            border-top: 1px solid var(--border-color);
+            background-color: var(--highlight-color);
+            backdrop-filter: blur(5px);
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .footer-text {
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+            letter-spacing: 0.05em;
+        }
+
+        /* 通知提示 */
+        .notification {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2.5);
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: calc(var(--spacing-unit) * 1);
+            opacity: 0;
+            transition: all 0.5s ease;
+            z-index: 100;
+        }
+
+        .notification.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* 适配深色模式 */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary-bg: #121212;
+                --secondary-bg: #1e1e1e;
+                --text-primary: rgba(230, 230, 230, 0.95);
+                --text-secondary: rgba(180, 180, 180, 0.85);
+                --text-tertiary: rgba(140, 140, 140, 0.75);
+                --accent-color: rgba(60, 60, 60, 0.5);
+                --border-color: rgba(70, 70, 70, 0.6);
+                --shadow-color: rgba(0, 0, 0, 0.15);
+                --highlight-color: rgba(40, 40, 40, 0.9);
+            }
+            
+            .app-container::before {
+                background-image: 
+                    linear-gradient(to right, rgba(70, 70, 70, 0.3) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(70, 70, 70, 0.3) 1px, transparent 1px);
+            }
+
+            .itinerary-card {
+                background-color: rgba(40, 40, 40, 0.7);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 顶部导航栏 -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="app-title">我的旅行</h1>
+                <div class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主内容区 -->
+        <main class="app-main">
+            <div class="section-title">
+                <h2>我的行程</h2>
+                <div class="micro-line"></div>
+            </div>
+
+            <!-- 行程卡片列表 -->
+            <div id="itineraryList" class="itinerary-list">
+                <!-- 行程卡片将通过 JavaScript 动态生成 -->
+            </div>
+
+            <!-- 空状态提示 -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fas fa-suitcase"></i>
+                <p>暂无行程计划</p>
+                <small>点击右下角 "+" 按钮创建您的第一个行程</small>
+            </div>
+
+            <!-- 创建行程按钮 -->
+            <div id="createBtn" class="create-btn">
+                <i class="fas fa-plus"></i>
+            </div>
+        </main>
+
+        <!-- 底部导航栏 -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                <span class="footer-text">极简风格 · 轻松出行</span>
+            </div>
+        </footer>
+
+        <!-- 操作通知提示 -->
+        <div id="notification" class="notification">
+            <i class="fas fa-check-circle" style="color: #4CAF50;"></i>
+            <span id="notificationText">操作成功</span>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取DOM元素
+            const itineraryList = document.getElementById('itineraryList');
+            const emptyState = document.getElementById('emptyState');
+            const createBtn = document.getElementById('createBtn');
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            // 示例行程数据
+            const sampleItineraries = [
+                {
+                    id: 1,
+                    title: '香港两日游｜在 citywalk 中穿梭港岛巷弄',
+                    days: 2,
+                    nights: 1,
+                    places: 10,
+                    image: 'https://source.unsplash.com/featured/200x200?hongkong'
+                },
+                {
+                    id: 2,
+                    title: '东京艺术探索｜博物馆与现代建筑的交融',
+                    days: 3,
+                    nights: 2,
+                    places: 12,
+                    image: 'https://source.unsplash.com/featured/200x200?tokyo'
+                },
+                {
+                    id: 3,
+                    title: '曼谷美食之旅｜从街头小吃到米其林餐厅',
+                    days: 4,
+                    nights: 3,
+                    places: 15,
+                    image: 'https://source.unsplash.com/featured/200x200?bangkok'
+                },
+                {
+                    id: 4,
+                    title: '京都古寺巡礼｜探访日本传统文化的发源地',
+                    days: 5,
+                    nights: 4,
+                    places: 8,
+                    image: 'https://source.unsplash.com/featured/200x200?kyoto'
+                },
+                {
+                    id: 5,
+                    title: '首尔购物狂欢｜从明洞到弘大的时尚之旅',
+                    days: 3,
+                    nights: 2,
+                    places: 6,
+                    image: 'https://source.unsplash.com/featured/200x200?seoul'
+                }
+            ];
+            
+            // 存储当前行程数据
+            let itineraries = [...sampleItineraries];
+            
+            // 渲染行程列表
+            function renderItineraries() {
+                itineraryList.innerHTML = '';
+                
+                if (itineraries.length === 0) {
+                    emptyState.style.display = 'block';
+                    return;
+                }
+                
+                emptyState.style.display = 'none';
+                
+                itineraries.forEach((itinerary, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'itinerary-card fade-in';
+                    card.style.animationDelay = `${index * 0.1}s`;
+                    card.dataset.id = itinerary.id;
+                    
+                    card.innerHTML = `
+                        <div class="card-content">
+                            <div class="card-image" style="background-image: url('${itinerary.image}')"></div>
+                            <div class="card-info">
+                                <div class="card-title">${itinerary.title}</div>
+                                <div class="card-meta">
+                                    <div class="meta-item">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>${itinerary.days} 天 ${itinerary.nights} 晚</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>${itinerary.places} 个地点</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="delete-btn">
+                            <i class="fas fa-trash-alt"></i>
+                        </div>
+                    `;
+                    
+                    itineraryList.appendChild(card);
+                    
+                    // 设置卡片滑动功能
+                    setupSwipeToDelete(card);
+                });
+            }
+            
+            // 设置滑动删除功能
+            function setupSwipeToDelete(card) {
+                let startX = 0;
+                let currentX = 0;
+                let isSwiping = false;
+                
+                // 处理触摸事件
+                card.addEventListener('touchstart', function(e) {
+                    startX = e.touches[0].clientX;
+                    isSwiping = true;
+                });
+                
+                card.addEventListener('touchmove', function(e) {
+                    if (!isSwiping) return;
+                    
+                    currentX = e.touches[0].clientX;
+                    const diffX = currentX - startX;
+                    
+                    // 只允许向左滑动，最大滑动距离80px
+                    if (diffX < 0 && diffX > -80) {
+                        card.style.transform = `translateX(${diffX}px)`;
+                    }
+                });
+                
+                card.addEventListener('touchend', function() {
+                    if (!isSwiping) return;
+                    
+                    const diffX = currentX - startX;
+                    
+                    // 如果滑动超过40px，则显示删除按钮
+                    if (diffX < -40) {
+                        card.classList.add('swiped');
+                    } else {
+                        card.classList.remove('swiped');
+                        card.style.transform = '';
+                    }
+                    
+                    isSwiping = false;
+                });
+                
+                // 处理鼠标事件（为了在桌面上也能测试）
+                card.addEventListener('mousedown', function(e) {
+                    startX = e.clientX;
+                    isSwiping = true;
+                });
+                
+                document.addEventListener('mousemove', function(e) {
+                    if (!isSwiping) return;
+                    
+                    currentX = e.clientX;
+                    const diffX = currentX - startX;
+                    
+                    // 只允许向左滑动，最大滑动距离80px
+                    if (diffX < 0 && diffX > -80) {
+                        card.style.transform = `translateX(${diffX}px)`;
+                    }
+                });
+                
+                document.addEventListener('mouseup', function() {
+                    if (!isSwiping) return;
+                    
+                    const diffX = currentX - startX;
+                    
+                    // 如果滑动超过40px，则显示删除按钮
+                    if (diffX < -40) {
+                        card.classList.add('swiped');
+                    } else {
+                        card.classList.remove('swiped');
+                        card.style.transform = '';
+                    }
+                    
+                    isSwiping = false;
+                });
+                
+                // 删除按钮点击事件
+                const deleteBtn = card.querySelector('.delete-btn');
+                deleteBtn.addEventListener('click', function() {
+                    const itineraryId = parseInt(card.dataset.id);
+                    deleteItinerary(itineraryId);
+                });
+            }
+            
+            // 删除行程
+            function deleteItinerary(id) {
+                itineraries = itineraries.filter(item => item.id !== id);
+                
+                // 显示删除成功通知
+                showNotification('行程已删除');
+                
+                // 重新渲染列表
+                renderItineraries();
+            }
+            
+            // 创建行程按钮点击事件
+            createBtn.addEventListener('click', function() {
+                // 直接跳转到创建行程页面
+                window.location.href = 'ai_travel_planner.html';
+            });
+            
+            // 显示通知
+            function showNotification(text) {
+                notificationText.textContent = text;
+                notification.classList.add('show');
+                
+                // 3秒后隐藏通知
+                setTimeout(function() {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            
+            // 初始化
+            renderItineraries();
+            
+            // 暗黑模式切换
+            const themeToggle = document.querySelector('.theme-toggle');
+            themeToggle.addEventListener('click', function() {
+                const icon = themeToggle.querySelector('i');
+                
+                if (icon.classList.contains('fa-moon')) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                    document.documentElement.classList.add('dark-mode');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                    document.documentElement.classList.remove('dark-mode');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

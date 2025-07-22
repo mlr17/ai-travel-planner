@@ -1,0 +1,59 @@
+@import './variables.scss';
+
+.theme-toggle {
+  position: relative;
+  display: inline-block;
+  margin: 0 8px;
+}
+
+.theme-toggle-checkbox {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.theme-toggle-label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  width: 50px;
+  height: 26px;
+  background: var(--toggle-bg, #ddd);
+  border-radius: 100px;
+  position: relative;
+  transition: background-color 0.2s;
+}
+
+.theme-toggle-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--toggle-button-bg, white);
+  position: absolute;
+  left: 3px;
+  transition: 0.2s;
+}
+
+.theme-toggle-checkbox:checked + .theme-toggle-label .theme-toggle-inner {
+  left: calc(100% - 3px - 20px);
+}
+
+.theme-toggle-icon {
+  font-size: 12px;
+  transition: 0.2s;
+}
+
+/* 暗色主题样式变量 */
+[data-theme='dark'] .theme-toggle-label {
+  --toggle-bg: #555;
+}
+
+[data-theme='dark'] .theme-toggle-inner {
+  --toggle-button-bg: #202020;
+} 

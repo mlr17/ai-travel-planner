@@ -1,0 +1,28 @@
+{
+  "trips": [
+    {
+      "id": "1",
+      "title": "香港两日游｜在 citywalk 中穿梭港岛巷弄",
+      "days": 2,
+      "nights": 1,
+      "places": 10,
+      "image": "https://source.unsplash.com/featured/200x200?hongkong"
+    },
+    {
+      "id": "2",
+      "title": "东京艺术探索｜博物馆与现代建筑的交融",
+      "days": 3,
+      "nights": 2,
+      "places": 12,
+      "image": "https://source.unsplash.com/featured/200x200?tokyo"
+    },
+    {
+      "id": "3",
+      "title": "曼谷美食之旅｜从街头小吃到米其林餐厅",
+      "days": 4,
+      "nights": 3,
+      "places": 15,
+      "image": "https://source.unsplash.com/featured/200x200?bangkok"
+    }
+  ]
+} 

@@ -1,0 +1,180 @@
+// CSS变量声明
+:root {
+  // 亮色主题（默认）
+  --color-primary: #3498db;
+  --color-secondary: #2ecc71;
+  --color-accent: #9b59b6;
+  --color-warning: #f39c12;
+  --color-danger: #e74c3c;
+  --color-success: #2ecc71;
+  --color-info: #3498db;
+  
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8f9fa;
+  --color-bg-tertiary: #e9ecef;
+  
+  --color-text-primary: #212529;
+  --color-text-secondary: #6c757d;
+  --color-text-light: #f8f9fa;
+  
+  --color-border: #dee2e6;
+  --color-shadow: rgba(0, 0, 0, 0.1);
+  
+  --font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --box-shadow: 0 2px 10px var(--color-shadow);
+  
+  // 响应式断点
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  
+  // 颜色变量 - 更新为与参考页面完全一致的值
+  --primary-bg: #fafafa;
+  --secondary-bg: #f5f5f5;
+  --text-primary: rgba(30, 30, 30, 0.95);
+  --text-secondary: rgba(80, 80, 80, 0.85);
+  --text-tertiary: rgba(120, 120, 120, 0.75);
+  --accent-color: rgba(200, 200, 200, 0.5);
+  --border-color: rgba(220, 220, 220, 0.6);
+  --shadow-color: rgba(0, 0, 0, 0.03);
+  --highlight-color: rgba(255, 255, 255, 0.9);
+  --delete-color: rgba(239, 68, 68, 0.9);
+  
+  // 间距
+  --spacing-unit: 0.75rem;
+  --transition-time: 0.4s;
+  --border-radius: 3px;
+  
+  // 字体家族
+  --font-primary: 'Noto Sans SC', sans-serif;
+  --font-secondary: 'Noto Serif SC', serif;
+  
+  // 字体大小 - 确保与参考页面完全一致
+  --font-size-xs: 0.85rem;    // 小号文本
+  --font-size-sm: 0.9rem;     // 正文小
+  --font-size-md: 1rem;       // 正文标准
+  --font-size-lg: 1.1rem;     // 卡片标题
+  --font-size-xl: 1.4rem;     // 应用标题
+  --font-size-xxl: 1.6rem;    // 部分标题
+  --font-size-huge: 1.8rem;   // 图标
+  
+  // 阴影
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 6px 20px rgba(0, 0, 0, 0.15);
+  
+  // 增加字重相关变量
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 600;
+}
+
+// SCSS变量
+// 主色调
+$primary-color: #4285f4;
+$primary-light: lighten($primary-color, 15%);
+$primary-dark: darken($primary-color, 15%);
+
+// 强调色
+$accent-color: #ff9800;
+$accent-light: lighten($accent-color, 15%);
+$accent-dark: darken($accent-color, 15%);
+
+// 功能色
+$success-color: #34a853;
+$error-color: #ea4335;
+$warning-color: #fbbc05;
+$info-color: #4285f4;
+
+// 背景色
+$background-color: #fafafa;
+$background-light: #f5f5f5;
+$background-dark: #e0e0e0;
+
+// 文本色
+$text-primary: rgba(30, 30, 30, 0.95);
+$text-secondary: rgba(80, 80, 80, 0.85);
+$text-disabled: rgba(120, 120, 120, 0.75);
+$text-hint: #80868b;
+
+// 边框色
+$border-color: rgba(220, 220, 220, 0.6);
+$divider-color: #e8eaed;
+
+// 底部导航栏
+$footer-bg: rgba(255, 255, 255, 0.9);
+$footer-text: rgba(120, 120, 120, 0.75);
+
+// 阴影
+$box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+$box-shadow-hover: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+// 圆角
+$border-radius-sm: 3px;
+$border-radius-md: 8px;
+$border-radius-lg: 16px;
+
+// 间距
+$spacing-unit: 0.75rem;
+$spacing-xs: calc($spacing-unit * 0.5);
+$spacing-sm: $spacing-unit;
+$spacing-md: calc($spacing-unit * 1.5);
+$spacing-lg: calc($spacing-unit * 2);
+$spacing-xl: calc($spacing-unit * 3);
+$spacing-xxl: calc($spacing-unit * 4);
+
+// 字体大小
+$font-size-xs: 0.85rem;
+$font-size-sm: 0.9rem;
+$font-size-md: 1rem;
+$font-size-lg: 1.1rem;
+$font-size-xl: 1.4rem;
+$font-size-xxl: 1.6rem;
+
+// 动画时间
+$transition-time: 0.4s;
+$transition-fast: calc($transition-time * 0.5);
+$transition-normal: $transition-time;
+$transition-slow: calc($transition-time * 1.5);
+
+// 暗色主题
+.dark-mode {
+  --color-primary: #48a9e6;
+  --color-secondary: #3ddb80;
+  --color-accent: #a67ac5;
+  --color-warning: #ffb74d;
+  --color-danger: #ef5350;
+  --color-success: #66bb6a;
+  --color-info: #4fc3f7;
+  
+  --color-bg-primary: #121212;
+  --color-bg-secondary: #1e1e1e;
+  --color-bg-tertiary: #2d2d2d;
+  
+  --color-text-primary: #f8f9fa;
+  --color-text-secondary: #adb5bd;
+  --color-text-light: #f8f9fa;
+  
+  --color-border: #444444;
+  --color-shadow: rgba(0, 0, 0, 0.5);
+  
+  --primary-bg: #121212;
+  --secondary-bg: #1e1e1e;
+  --text-primary: rgba(230, 230, 230, 0.95);
+  --text-secondary: rgba(180, 180, 180, 0.85);
+  --text-tertiary: rgba(140, 140, 140, 0.75);
+  --accent-color: rgba(60, 60, 60, 0.5);
+  --border-color: rgba(70, 70, 70, 0.6);
+  --shadow-color: rgba(0, 0, 0, 0.15);
+  --highlight-color: rgba(40, 40, 40, 0.9);
+}
+
+// 导出变量以便在JavaScript中使用
+:export {
+  primaryColor: $primary-color;
+  accentColor: $accent-color;
+  backgroundColor: $background-color;
+  textPrimary: $text-primary;
+} 
