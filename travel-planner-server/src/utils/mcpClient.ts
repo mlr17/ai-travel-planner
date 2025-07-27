@@ -113,14 +113,15 @@ export class MCPClient {
 
     try {
       // 初始 Claude API 调用
-      const response = await this.anthropic.messages.create({
+      const res :string= await this.anthropic.messages.create({
         model: "claude-3-5-sonnet-latest",
         max_tokens: 4000, // 增加 token 限制，确保完整的响应
         messages,
         tools: this.tools,
         temperature: 0.7, // 添加温度参数，使生成更稳定
-      });
-
+      }) as any;
+      const response = JSON.parse(res);
+      console.log("Claude API 调用响应:", response);
       // 处理响应和工具调用
       const finalText = [];
       const toolResults = [];
@@ -128,6 +129,7 @@ export class MCPClient {
       let toolCallCount = 0;
 
       for (const content of response.content) {
+        console.log("Claude API 调用响应内容:", content);
         if (content.type === "text") {
           finalText.push(content.text);
         } else if (content.type === "tool_use" && toolCallCount < maxToolCalls) {
@@ -155,12 +157,12 @@ export class MCPClient {
 
             // 获取 Claude 的下一个响应
             try {
-              const followupResponse = await this.anthropic.messages.create({
+              const followupResponse = JSON.parse(await this.anthropic.messages.create({
                 model: "claude-3-5-sonnet-latest",
                 max_tokens: 4000,
                 messages,
                 temperature: 0.7,
-              });
+              }) as any);
 
               finalText.push(
                 followupResponse.content[0].type === "text" 
@@ -183,12 +185,12 @@ export class MCPClient {
             
             // 获取 Claude 的恢复响应
             try {
-              const recoveryResponse = await this.anthropic.messages.create({
+              const recoveryResponse = JSON.parse(await this.anthropic.messages.create({
                 model: "claude-3-5-sonnet-latest",
                 max_tokens: 4000,
                 messages,
                 temperature: 0.7,
-              });
+              }) as any);
               
               finalText.push(
                 recoveryResponse.content[0].type === "text" 
@@ -209,12 +211,12 @@ export class MCPClient {
       });
       
       try {
-        const finalResponse = await this.anthropic.messages.create({
+        const finalResponse = JSON.parse(await this.anthropic.messages.create({
           model: "claude-3-5-sonnet-latest",
           max_tokens: 4000,
           messages,
           temperature: 0.7,
-        });
+        }) as any);
         
         if (finalResponse.content[0].type === "text") {
           finalText.push(finalResponse.content[0].text);
@@ -223,7 +225,7 @@ export class MCPClient {
         console.error("获取最终响应时出错:", finalError);
       }
 
-      return finalText.join("\n");
+      return finalText?.join("\n");
     } catch (error) {
       console.error("处理查询时出错:", error);
       throw error;
